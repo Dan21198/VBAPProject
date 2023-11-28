@@ -24,25 +24,21 @@ public class CarsController {
     }
 
     @GetMapping("/cars")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Car> getAll() {
         return carService.getAll();
     }
 
     @GetMapping("/cars/brand/{brand}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Car> getByBrand(@PathVariable("brand") String brand) {
         return carService.getByBrand(brand);
     }
 
     @GetMapping("/getCarById/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public Car get(@PathVariable("id") long id) {
         return carService.getById(id);
     }
 
     @GetMapping("/cars/notInOrder")
-    @PreAuthorize("hasAnyRole('ADMIN', 'USER')")
     public List<Car> getCarsNotInOrder() {
         return carService.getCarsNotInOrder();
     }
