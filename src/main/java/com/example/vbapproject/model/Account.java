@@ -32,6 +32,7 @@ public class Account implements UserDetails {
     @Getter
     @NotNull
     @Size(min = 8)
+    @JsonIgnore
     private String password;
 
     @NotNull
