@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -114,4 +115,12 @@ public class AuthenticationService {
       }
     }
   }
+
+  public void logout(String userEmail) {
+    var account = accountRepository.findByUserName(userEmail)
+            .orElseThrow(() -> new UsernameNotFoundException("Account not found"));
+
+    revokeAllUserTokens(account);
+  }
+
 }
