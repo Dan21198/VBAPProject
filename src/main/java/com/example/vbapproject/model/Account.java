@@ -28,7 +28,7 @@ public class Account implements UserDetails {
 
     @Getter
     @NotNull
-    @UniqueElements
+    @Column(unique = true)
     private String userName;
 
     @Getter
