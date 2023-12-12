@@ -1,25 +1,58 @@
 package com.example.vbapproject.services;
 
+import com.example.vbapproject.exception.RecordNotFoundException;
 import com.example.vbapproject.model.Car;
 import com.example.vbapproject.repository.CarRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 class CarServiceImplTest {
+    @Mock
     private CarRepository carRepository;
-    private CarService carService;
+
+    @InjectMocks
+    private CarServiceImpl carService;
 
     @BeforeEach
-    public void setUp() {
-        carRepository = mock(CarRepository.class);
-        carService = new CarServiceImpl(carRepository);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
+
+    @Test
+    void testGetCarById_WhenCarExists() {
+        long carId = 1L;
+        Car existingCar = new Car();
+        existingCar.setId(carId);
+        existingCar.setBrand("Toyota");
+        existingCar.setModelOfCar("Camry");
+
+        when(carRepository.findById(carId)).thenReturn(Optional.of(existingCar));
+
+        Car fetchedCar = carService.getById(carId);
+
+        assertNotNull(fetchedCar);
+        assertEquals(existingCar.getBrand(), fetchedCar.getBrand());
+        assertEquals(existingCar.getModelOfCar(), fetchedCar.getModelOfCar());
+    }
+
+    @Test
+    void testGetCarById_WhenCarDoesNotExist() {
+        long carId = 1L;
+
+        when(carRepository.findById(carId)).thenReturn(Optional.empty());
+
+        assertThrows(RecordNotFoundException.class, () -> carService.getById(carId));
     }
 
     @Test
